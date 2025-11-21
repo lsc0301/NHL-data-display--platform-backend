@@ -1,0 +1,32 @@
+# dependencies
+node_modules/
+
+# compiled output
+dist/
+*.js.map
+
+# logs
+logs/
+*.log
+npm-debug.log*
+
+# environment variables
+.env
+.env.local
+.env.*.local
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# operating system
+.DS_Store
+Thumbs.db
+
+# temporary files
+*.tmp
+*.temp
+
