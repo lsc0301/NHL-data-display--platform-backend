@@ -1,12 +1,19 @@
 /**
+ * Created by: Shichen Liu
+ * Date: 2025-11-21
+ * 
  * NHL Data Display Platform Backend
  * Main entry file
+ * 
+ * This file is the main entry point for the backend server.
  */
+
+import { config } from "./config";
 
 console.log('🚀 NHL Data Display Platform Backend starting...');
 
-// Example: Simple server startup
-const PORT = process.env.PORT || 3000;
+// Server configuration
+const PORT = config.PORT;
 
 console.log(`Server will run on port ${PORT}`);
 console.log('Project initialization completed!');

@@ -15,6 +15,15 @@ npm-debug.log*
 .env.local
 .env.*.local
 
+# credentials and keys
+config/*.json
+config/credentials/*.json
+!config/.gitkeep
+!config/credentials/.gitkeep
+credentials/*.json
+*.json.key
+service-account*.json
+
 # IDEs
 .vscode/
 .idea/
