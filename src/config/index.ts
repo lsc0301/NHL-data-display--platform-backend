@@ -51,6 +51,28 @@ class Config {
      */
     readonly PORT: number = parseInt(process.env.PORT || "3000", 10);
 
+    // NHL API Configuration
+    /**
+     * NHL API base URL (default: https://api-web.nhle.com)
+     */
+    readonly NHL_API_BASE_URL: string =
+        process.env.NHL_API_BASE_URL || "https://api-web.nhle.com";
+
+    // Firestore Configuration
+    /**
+     * Firestore collection name for games (default: games)
+     */
+    readonly FIRESTORE_GAMES_COLLECTION: string =
+        process.env.FIRESTORE_GAMES_COLLECTION || "games";
+
+    /**
+     * Number of days to update for schema changes (default: 30)
+     */
+    readonly DAYS_TO_UPDATE_FOR_SCHEMA: number = parseInt(
+        process.env.DAYS_TO_UPDATE_FOR_SCHEMA || "30",
+        10
+    );
+
     /**
      * Validate configuration values
      * Throws error if required values are missing
@@ -59,6 +81,16 @@ class Config {
         // Add validation logic here if needed
         if (isNaN(this.PORT) || this.PORT < 1 || this.PORT > 65535) {
             throw new Error(`Invalid PORT value: ${this.PORT}. Must be between 1 and 65535.`);
+        }
+
+        if (isNaN(this.DAYS_TO_UPDATE_FOR_SCHEMA) || this.DAYS_TO_UPDATE_FOR_SCHEMA < 1) {
+            throw new Error(
+                `Invalid DAYS_TO_UPDATE_FOR_SCHEMA value: ${this.DAYS_TO_UPDATE_FOR_SCHEMA}. Must be at least 1.`
+            );
+        }
+
+        if (!this.NHL_API_BASE_URL || !this.NHL_API_BASE_URL.trim()) {
+            throw new Error("NHL_API_BASE_URL cannot be empty.");
         }
     }
 }

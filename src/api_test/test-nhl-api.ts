@@ -7,7 +7,7 @@
  * Or: ts-node src/test-nhl-api.ts
  */
 
-import { nhlApiService } from "../services/nhlApi";
+import { nhlApiService } from "../api/nhlApi";
 import { writeFileSync } from "fs";
 import { join } from "path";
 
@@ -62,31 +62,6 @@ async function testNhlApi() {
         if (scheduleYesterday) {
             output.push("\n📋 Schedule Response Structure:\n");
             output.push(JSON.stringify(scheduleYesterday, null, 2));
-        }
-
-        output.push("\n\n" + "=".repeat(80));
-        output.push("TEST 2: Score endpoint (/v1/score/{date})");
-        output.push("=".repeat(80));
-
-        // Test score endpoint with today's date
-        output.push(`\n📅 Testing scores with today's date: ${todayStr}\n`);
-        console.log(`📡 Fetching scores for ${todayStr}...`);
-        const scoresToday = await nhlApiService.fetchScoresByDate(todayStr);
-
-        if (scoresToday) {
-            output.push("\n📋 Scores Response Structure:\n");
-            output.push(JSON.stringify(scoresToday, null, 2));
-            output.push("\n\n📊 Response Type: " + typeof scoresToday);
-            if (Array.isArray(scoresToday)) {
-                output.push(`\n📦 Is Array: true | Length: ${scoresToday.length}`);
-            } else {
-                output.push("\n📦 Is Object: true");
-                if (scoresToday) {
-                    output.push("\n📝 Top Level Keys: " + Object.keys(scoresToday).join(", "));
-                }
-            }
-        } else {
-            output.push("\n❌ No scores data returned");
         }
 
         output.push("\n\n" + "=".repeat(80));
