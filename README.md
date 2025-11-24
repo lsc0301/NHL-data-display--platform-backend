@@ -16,6 +16,22 @@ This project is a Node.js + TypeScript backend service designed to fetch and sto
 
 This project demonstrates skills in API integration, real-time data processing, cloud databases, and messaging patterns, showcasing a practical backend engineering implementation.
 
+## How to test whole project
+
+1. **Setup Configuration Files**
+   - Place the `.env` file (from email) in the project root directory
+   - Place the `nhl-data-display-platform-firebase-adminsdk-fbsvc-83e5772d7a.json` file in the `config/` folder
+
+2. **Start the Node.js Service**
+   - Run `npm run dev` to start the service locally
+   - The service will begin listening for Pub/Sub messages
+
+3. **Send a Test Message**
+   - Open a new terminal window
+   - Run `npx ts-node src/utils/send-test-message.ts` to send a test message
+   - Check the first terminal to see the service processing the message and storing data to Firestore
+
+
 ## Setup & Build
 
 ### Step 1: Initialize Project and Setup Git Repository
@@ -50,6 +66,7 @@ This project demonstrates skills in API integration, real-time data processing, 
    - **Create Topic**: Create a single Pub/Sub topic for receiving messages (nhl-scores-fetch)
    - **Create Subscription**: Create one pull subscription for the topic (nhl-scores-subscriber)
    - **Configure Ack Deadline**: Set the acknowledgment deadline to 60 seconds to ensure enough time to fetch and process NHL API data before acknowledging messages
+   - **Configure IAM Permissions**: Add Pub/Sub Subscriber role to the Firebase service account in Google Cloud IAM
    - Note: I kept Pub/Sub setup very minimal for this assignment. The only non-default change was setting the ack deadline to 60 seconds. All other configurations use default settings.
 
 ### Step 3: Implement Firebase and Pub/Sub Service Initialization
@@ -208,4 +225,22 @@ This project demonstrates skills in API integration, real-time data processing, 
    - Schema adaptation updates are non-blocking (best-effort)
    - Detailed logging for successful and failed operations
    - If schema update fails, main game storage continues normally
+
+### Step 7: Integrate All Modules in Main Entry File
+
+1. **Main Entry File** (`src/index.ts`)
+   - Integrates all services: Firebase, Pub/Sub, NHL API, and Game Service
+   - Initializes Firebase Admin SDK automatically on import
+   - Sets up Pub/Sub message listener
+   
+2. **Message Processing Flow**
+   - When a Pub/Sub message is received:
+     1. Fetches NHL game data for today + past 7 days (total 8 days) using `nhlApiService.fetchGamesForDateRange(7)`
+     2. Processes and stores games in Firestore using `processAndStoreGames()`
+     3. Automatically handles schema adaptation for recent games
+   
+3. **Error Handling**
+   - Message processing errors trigger message nack (retry mechanism)
+   - Graceful shutdown handling (SIGINT/SIGTERM)
+   - Uncaught exception and unhandled rejection handlers
 
